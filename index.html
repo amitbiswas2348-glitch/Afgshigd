@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>🎁 DOUBLE STAGE CLICK CHALLENGE 🎁</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Heat System CSS Variables */
+            --btn-color-1: #ff5e3a;
+            --btn-color-2: #ff2a00;
+            --btn-glow: rgba(255, 42, 0, 0.4);
+            --heat-glow: rgba(255, 77, 46, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            /* Zoom Prevention for Mobile */
+            touch-action: manipulation; 
+        }
+
+        body {
+            min-height: 100vh;
+            background: #050507;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(255, 107, 74, 0.08), transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(255, 180, 70, 0.08), transparent 50%);
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+            color: #ffffff;
+        }
+
+        /* Animated grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 0;
+            mask-image: radial-gradient(circle at center, black, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
+        }
+
+        .challenge-container {
+            position: relative;
+            z-index: 10;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Premium Gift Banner */
+        .gift-banner {
+            background: rgba(255, 180, 70, 0.05);
+            border: 1px solid rgba(255, 180, 70, 0.2);
+            border-radius: 100px;
+            padding: 10px 24px;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(255, 107, 74, 0.1);
+        }
+
+        .gift-banner p {
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #fff, #ffd966, #ff8c42);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Stage Badge */
+        .stage-badge {
+            display: inline-block;
+            background: rgba(255, 107, 74, 0.1);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            color: #ffb347;
+            border: 1px solid rgba(255, 180, 70, 0.3);
+            box-shadow: 0 0 15px rgba(255, 107, 74, 0.2);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            background: linear-gradient(to bottom, #ffffff, #aab9e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+        }
+
+        /* The 3D Glowing Button */
+        .click-button {
+            background: linear-gradient(145deg, var(--btn-color-1), var(--btn-color-2));
+            border: none;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            font-family: 'Outfit', sans-serif;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.1s;
+            box-shadow: 
+                0 0 0 8px rgba(255, 107, 74, 0.1), 
+                0 20px 40px var(--btn-glow),
+                inset 0 4px 15px rgba(255, 255, 255, 0.4), 
+                inset 0 -8px 20px rgba(0, 0, 0, 0.3);
+            margin: 1rem auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .click-button::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+            pointer-events: none;
+        }
+
+        .click-button:active {
+            transform: scale(0.94) translateY(4px);
+            box-shadow: 
+                0 0 0 4px rgba(255, 107, 74, 0.1), 
+                0 10px 20px var(--btn-glow), 
+                inset 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .click-button.disabled {
+            background: linear-gradient(145deg, #333, #222);
+            box-shadow: none;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .click-button span {
+            font-size: 3rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        /* Glassmorphism Stats Card */
+        .counter-card {
+            background: rgba(20, 25, 35, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 1.8rem;
+            width: 100%;
+            margin: 2rem 0 1rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .click-count {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .click-count span {
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .target-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #8892b0;
+            margin-top: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Glowing Progress Bar */
+        .progress-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 100px;
+            height: 12px;
+            width: 100%;
+            margin-top: 1.2rem;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ffb347, #ff4d2e);
+            border-radius: 100px;
+            transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px var(--heat-glow);
+        }
+
+        .reset-btn {
+            background: transparent;
+            border: none;
+            color: #555;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: color 0.2s;
+            margin-top: 1rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .reset-btn:hover {
+            color: #ff4d2e;
+        }
+
+        /* High-End Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: rgba(15, 20, 25, 0.9);
+            border-radius: 32px;
+            padding: 2.5rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(255, 107, 74, 0.3);
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.8), 
+                0 0 40px rgba(255, 107, 74, 0.1);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.4s cubic-bezier(0.34, 1.5, 0.64, 1);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-message {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            line-height: 1.6;
+            margin: 1.5rem 0;
+            white-space: pre-line;
+        }
+
+        .gift-code {
+            background: #000;
+            padding: 1.2rem;
+            border-radius: 16px;
+            font-family: monospace;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #ffd966;
+            border: 1px dashed rgba(255, 180, 70, 0.5);
+            margin: 1.5rem 0;
+            text-shadow: 0 0 10px rgba(255, 217, 102, 0.4);
+        }
+
+        .modal-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 800;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: 'Outfit', sans-serif;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255,255,255,0.2);
+        }
+
+        .ready-btn {
+            background: linear-gradient(135deg, #ffb347, #ff6b4a);
+            color: white;
+        }
+
+        /* VFX Animations */
+        .effect-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .floating-emoji {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            z-index: 1001;
+            animation: floatUp 2s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-150px) rotate(20deg); opacity: 0; }
+        }
+
+        .shake-global {
+            animation: screenShake 0.4s ease-in-out;
+        }
+
+        @keyframes screenShake {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(-4px, -3px); }
+            75% { transform: translate(4px, 2px); }
+        }
+
+        .glow-pulse {
+            animation: globalGlow 0.8s ease-out 3;
+        }
+
+        @keyframes globalGlow {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.5) drop-shadow(0 0 20px #ffaa44); }
+            100% { filter: brightness(1); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="challenge-container">
+    <div class="gift-banner">
+        <p>✨ A SPECIAL GIFT IS WAITING FOR YOU ✨</p>
+    </div>
+    
+    <div class="stage-badge" id="stageBadge">🔥 STAGE 1/2 🔥</div>
+    <h1 class="title">CLICK CHALLENGE</h1>
+    
+    <button class="click-button" id="clickBtn">
+        <span>🖱️</span> CLICK
+    </button>
+    
+    <div class="counter-card">
+        <div class="click-count">
+            <span id="clickCounter">0</span> <span id="totalTarget">/ 7500</span>
+        </div>
+        <div class="target-text" id="stageText">Click to reach Stage 1 target!</div>
+        <div class="progress-container">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+    
+    <button class="reset-btn" id="resetBtn">⟳ reset challenge</button>
+</div>
+
+<script>
+    (function() {
+        // ========== PRODUCTION VALUES ==========
+        const STAGE_1_TARGET = 2500;
+        const STAGE_2_TOTAL = 7500;
+        const MAX_CPS = 17;
+        
+        // --- 1. SAVE STATE ---
+        // Pulls from localStorage so progress isn't lost on refresh
+        let currentClicks = parseInt(localStorage.getItem('strike_clicks')) || 0;
+        let stage1Completed = localStorage.getItem('strike_s1') === 'true';
+        let stage2Started = localStorage.getItem('strike_s2') === 'true';
+        let challengeCompleted = localStorage.getItem('strike_done') === 'true';
+        
+        let buttonEnabled = true;
+        let waitingForReady = false;
+        
+        // Anti-Cheat Variables
+        let clickTimestamps = [];
+        let lastClickPos = { x: 0, y: 0 };
+        let samePositionCount = 0;
+        let clicksWithoutMouseMove = 0;
+        let mouseMoved = true;
+        
+        // DOM Elements
+        const clickBtn = document.getElementById('clickBtn');
+        const clickCounterSpan = document.getElementById('clickCounter');
+        const totalTargetSpan = document.getElementById('totalTarget');
+        const progressFill = document.getElementById('progressFill');
+        const resetBtn = document.getElementById('resetBtn');
+        const stageBadge = document.getElementById('stageBadge');
+        const stageText = document.getElementById('stageText');
+        
+        // --- 4. AUDIO ENGINE ---
+        // Generates sound without needing mp3 files
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function playTickSound() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600 + (Math.random() * 50), audioCtx.currentTime); 
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+            
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // Helper to save progress invisibly
+        function saveProgress() {
+            localStorage.setItem('strike_clicks', currentClicks);
+            localStorage.setItem('strike_s1', stage1Completed);
+            localStorage.setItem('strike_s2', stage2Started);
+            localStorage.setItem('strike_done', challengeCompleted);
+        }
+        
+        document.addEventListener('mousemove', () => { 
+            mouseMoved = true; 
+            clicksWithoutMouseMove = 0; 
+        });
+        
+        function updateUI() {
+            clickCounterSpan.textContent = currentClicks;
+            totalTargetSpan.textContent = `/ ${STAGE_2_TOTAL}`;
+            
+            const percent = (currentClicks / STAGE_2_TOTAL) * 100;
+            progressFill.style.width = `${Math.min(percent, 100)}%`;
+            
+            // --- 3. HEAT SYSTEM ---
+            // Changes the button color dynamically based on progress
+            let currentTarget = stage1Completed ? STAGE_2_TOTAL : STAGE_1_TARGET;
+            let baseAmount = stage1Completed ? STAGE_1_TARGET : 0;
+            let heatProgress = (currentClicks - baseAmount) / (currentTarget - baseAmount);
+            
+            if(heatProgress > 1) heatProgress = 1;
+            
+            let glowIntensity = 0.4 + (heatProgress * 0.6); 
+            document.documentElement.style.setProperty('--btn-glow', `rgba(255, 42, 0, ${glowIntensity})`);
+            document.documentElement.style.setProperty('--heat-glow', `rgba(255, 77, 46, ${glowIntensity})`);
+
+            if (heatProgress > 0.85) {
+                document.documentElement.style.setProperty('--btn-color-1', '#ff8a75'); 
+            } else {
+                document.documentElement.style.setProperty('--btn-color-1', '#ff5e3a'); 
+            }
+
+            // Text Updates
+            if (challengeCompleted) {
+                stageBadge.innerHTML = '🏆 COMPLETE! 🏆'; 
+                stageBadge.style.color = '#ffd966';
+                stageText.textContent = 'Challenge completed! You got the gift!';
+            } else if (stage1Completed && !stage2Started) {
+                stageBadge.innerHTML = '⏸️ STAGE 1 COMPLETE ⏸️'; 
+                stageBadge.style.color = '#ffaa44';
+                stageText.textContent = 'Click "READY FOR STAGE 2" to continue!';
+            } else if (stage1Completed && stage2Started) {
+                stageBadge.innerHTML = '⚡ STAGE 2/2 ⚡'; 
+                stageBadge.style.color = '#ff6b4a';
+                stageText.textContent = `${STAGE_2_TOTAL - currentClicks} more clicks to unlock the ultimate gift!`;
+            } else {
+                stageBadge.innerHTML = '🔥 STAGE 1/2 🔥'; 
+                stageBadge.style.color = '#ffb347';
+                stageText.textContent = `${STAGE_1_TARGET - currentClicks} more clicks to complete Stage 1!`;
+            }
+        }
+        
+        // Gatekeeper Anti-Bot Check
+        function detectAndResetIfBot(clickX, clickY) {
+            const now = Date.now();
+            clickTimestamps.push(now);
+            clickTimestamps = clickTimestamps.filter(t => now - t < 1000);
+            
+            if (clickTimestamps.length > MAX_CPS) { 
+                triggerAutoClickerReset("TOO FAST! More than " + MAX_CPS + " clicks per second detected."); 
+                return true; 
+            }
+            
+            if (Math.abs(clickX - lastClickPos.x) < 3 && Math.abs(clickY - lastClickPos.y) < 3) {
+                samePositionCount++;
+                if (samePositionCount >= 4) { 
+                    triggerAutoClickerReset("SAME POSITION! You clicked the exact same spot 4+ times."); 
+                    return true; 
+                }
+            } else { 
+                samePositionCount = 0; 
+            }
+            
+            lastClickPos = { x: clickX, y: clickY };
+            
+            if (!mouseMoved) {
+                clicksWithoutMouseMove++;
+                if (clicksWithoutMouseMove >= 8) { 
+                    triggerAutoClickerReset("NO MOUSE MOVEMENT! 8+ clicks with zero mouse movement."); 
+                    return true; 
+                }
+            } else { 
+                clicksWithoutMouseMove = 0; 
+                mouseMoved = false; 
+            }
+            
+            return false;
+        }
+        
+        function triggerAutoClickerReset(reason) {
+            if (challengeCompleted) return;
+            
+            showWarningModal(`⚠️ AUTO-CLICKER DETECTED! ⚠️\n\n${reason}\n\nProgress reset to 0. Start over fairly!`);
+            
+            currentClicks = 0; 
+            stage1Completed = false; 
+            stage2Started = false; 
+            challengeCompleted = false;
+            waitingForReady = false; 
+            buttonEnabled = true; 
+            
+            clickBtn.disabled = false; 
+            clickBtn.classList.remove('disabled');
+            clickTimestamps = []; 
+            samePositionCount = 0; 
+            clicksWithoutMouseMove = 0; 
+            mouseMoved = true;
+            
+            saveProgress(); // Wipe memory
+            closeAllModals(); 
+            updateUI();
+        }
+        
+        function showWarningModal(message) {
+            const existingModal = document.getElementById('warningModal'); 
+            if (existingModal) existingModal.remove();
+            
+            const modal = document.createElement('div'); 
+            modal.id = 'warningModal'; 
+            modal.className = 'modal-overlay active';
+            
+            modal.innerHTML = `
+                <div class="modal-card">
+                    <div style="font-size: 4rem;">⚠️</div>
+                    <div class="modal-message">${message.replace(/\n/g, '<br>')}</div>
+                    <button class="modal-btn" id="closeWarningBtn">😭 START OVER 😭</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.getElementById('closeWarningBtn').onclick = () => modal.remove();
+            
+            setTimeout(() => { 
+                if (document.getElementById('warningModal')) modal.remove(); 
+            }, 4000);
+        }
+        
+        function closeAllModals() { 
+            document.querySelectorAll('.modal-overlay').forEach(m => m.remove()); 
+        }
+        
+        // VFX Functions
+        function createConfetti(x, y) {
+            for (let i = 0; i < 60; i++) {
+                const conf = document.createElement('div');
+                conf.style.position = 'fixed'; 
+                conf.style.left = x + 'px'; 
+                conf.style.top = y + 'px';
+                conf.style.width = Math.random() * 8 + 4 + 'px'; 
+                conf.style.height = Math.random() * 8 + 4 + 'px';
+                conf.style.backgroundColor = `hsl(${Math.random() * 360}, 80%, 60%)`;
+                conf.style.pointerEvents = 'none'; 
+                conf.style.zIndex = '1002';
+                
+                let vx = (Math.random() - 0.5) * 12; 
+                let vy = (Math.random() - 0.5) * 12 - 5;
+                let posX = 0, posY = 0, opacity = 1, startTime = performance.now();
+                
+                document.body.appendChild(conf);
+                
+                function animate() {
+                    const elapsed = (performance.now() - startTime) / 1000;
+                    posX = vx * elapsed * 60; 
+                    posY = vy * elapsed * 60 + 0.5 * 300 * elapsed * elapsed;
+                    opacity = 1 - elapsed * 1.5; 
+                    conf.style.transform = `translate(${posX}px, ${posY}px)`; 
+                    conf.style.opacity = Math.max(0, opacity);
+                    
+                    if (opacity > 0 && elapsed < 1.5) { 
+                        requestAnimationFrame(animate); 
+                    } else { 
+                        conf.remove(); 
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+        }
+        
+        function screenFlash() { 
+            const flash = document.createElement('div'); 
+            flash.style.position = 'fixed'; 
+            flash.style.top = '0'; 
+            flash.style.left = '0'; 
+            flash.style.width = '100%'; 
+            flash.style.height = '100%'; 
+            flash.style.backgroundColor = '#fff9c4'; 
+            flash.style.pointerEvents = 'none'; 
+            flash.style.zIndex = '1500'; 
+            flash.style.opacity = '0.8'; 
+            document.body.appendChild(flash); 
+            setTimeout(() => { 
+                flash.style.opacity = '0'; 
+                setTimeout(() => flash.remove(), 400); 
+            }, 80); 
+        }
+        
+        function screenShake() { 
+            document.body.classList.add('shake-global'); 
+            setTimeout(() => document.body.classList.remove('shake-global'), 400); 
+        }
+        
+        function glowPulse() { 
+            document.body.classList.add('glow-pulse'); 
+            setTimeout(() => document.body.classList.remove('glow-pulse'), 2400); 
+        }
+        
+        function spawnEmojis() {
+            const emojis = ['🎉', '✨', '🏆', '🎊', '💀', '📱', '📚', '🤡', '🔥', '💪'];
+            for (let i = 0; i < 30; i++) {
+                const div = document.createElement('div'); 
+                div.className = 'floating-emoji'; 
+                div.textContent = emojis[Math.floor(Math.random() * emojis.length)]; 
+                div.style.left = Math.random() * window.innerWidth + 'px'; 
+                div.style.bottom = '-20px'; 
+                div.style.fontSize = (Math.random() * 28 + 18) + 'px'; 
+                document.body.appendChild(div); 
+                setTimeout(() => div.remove(), 1900);
+            }
+        }
+        
+        function triggerStageEffects(centerX, centerY) { 
+            screenFlash(); 
+            screenShake(); 
+            glowPulse(); 
+            spawnEmojis(); 
+            for (let i = 0; i < 3; i++) { 
+                setTimeout(() => createConfetti(centerX + (Math.random() - 0.5) * 100, centerY + (Math.random() - 0.5) * 100), i * 100); 
+            } 
+        }
+        
+        // Modals
+        function showStage1CompleteModal() {
+            closeAllModals(); 
+            waitingForReady = true;
+            
+            const modal = document.createElement('div'); 
+            modal.id = 'stage1Modal'; 
+            modal.className = 'modal-overlay active';
+            
+            modal.innerHTML = `
+                <div class="modal-card">
+                    <div style="font-size: 4rem;">🎉</div>
+                    <div class="modal-message">BDSK PHADHLE JA KAR SARA DIN<br>BUS PHONE AUR PHONE<br>PORA SONA KOR BARA</div>
+                    <button class="modal-btn" id="closeStage1Btn">💀 CONTINUE 💀</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.getElementById('closeStage1Btn').onclick = () => { 
+                modal.remove(); 
+                showReadyForStage2Modal(); 
+            };
+        }
+        
+        function showReadyForStage2Modal() {
+            buttonEnabled = false; 
+            clickBtn.disabled = true; 
+            clickBtn.classList.add('disabled');
+            
+            const modal = document.createElement('div'); 
+            modal.id = 'readyModal'; 
+            modal.className = 'modal-overlay active';
+            
+            modal.innerHTML = `
+                <div class="modal-card">
+                    <div style="font-size: 3rem;">🚀</div>
+                    <div class="modal-message" style="font-size: 1.3rem;">You survived 2,500 clicks!<br>But can you handle 5,000 more?</div>
+                    <button class="modal-btn ready-btn" id="readyForStage2Btn">✨ ARE YOU READY FOR STAGE 2? ✨</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.getElementById('readyForStage2Btn').onclick = () => { 
+                modal.remove(); 
+                stage2Started = true; 
+                waitingForReady = false; 
+                buttonEnabled = true; 
+                clickBtn.disabled = false; 
+                clickBtn.classList.remove('disabled'); 
+                
+                saveProgress(); 
+                updateUI(); 
+            };
+        }
+        
+        function showFinalGiftModal() {
+            challengeCompleted = true; 
+            buttonEnabled = false; 
+            clickBtn.disabled = true; 
+            clickBtn.classList.add('disabled');
+            
+            const modal = document.createElement('div'); 
+            modal.id = 'giftModal'; 
+            modal.className = 'modal-overlay active';
+            
+            modal.innerHTML = `
+                <div class="modal-card">
+                    <div style="font-size: 4rem;">🏆</div>
+                    <div class="modal-message">this is your gift for hard clicking</div>
+                    <div class="gift-code" id="giftCodeText">DM64X7ECCUXNYH96</div>
+                    <button class="modal-btn" id="copyGiftBtn">📋 COPY CODE</button>
+                    <button class="modal-btn" id="closeGiftBtn">🎉 CLOSE 🎉</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            document.getElementById('copyGiftBtn').onclick = () => { 
+                navigator.clipboard.writeText('DM64X7ECCUXNYH96'); 
+                alert('🎁 Gift code copied!'); 
+            };
+            
+            document.getElementById('closeGiftBtn').onclick = () => { 
+                modal.remove(); 
+            };
+            
+            saveProgress(); 
+            updateUI();
+        }
+        
+        // ========== MAIN CLICK HANDLER ==========
+        function handleClick(e) {
+            if (!buttonEnabled || challengeCompleted || waitingForReady) return;
+            
+            const rect = clickBtn.getBoundingClientRect();
+            
+            if (detectAndResetIfBot(e.clientX, e.clientY)) return;
+            
+            // --- 2. HAPTICS ---
+            if (navigator.vibrate) navigator.vibrate(10);
+            
+            playTickSound();
+            
+            currentClicks++;
+            saveProgress();
+            
+            if (!stage1Completed && currentClicks === STAGE_1_TARGET) {
+                stage1Completed = true; 
+                saveProgress();
+                triggerStageEffects(rect.left + rect.width/2, rect.top + rect.height/2);
+                showStage1CompleteModal(); 
+                updateUI(); 
+                return;
+            }
+            
+            if (stage1Completed && stage2Started && currentClicks === STAGE_2_TOTAL) {
+                triggerStageEffects(rect.left + rect.width/2, rect.top + rect.height/2);
+                
+                setTimeout(() => { 
+                    screenFlash(); 
+                    spawnEmojis(); 
+                    for (let i = 0; i < 5; i++) { 
+                        setTimeout(() => createConfetti(window.innerWidth/2, window.innerHeight/2), i * 80); 
+                    } 
+                }, 100);
+                
+                showFinalGiftModal(); 
+                updateUI(); 
+                return;
+            }
+            
+            if (currentClicks % 5 === 0) {
+                createConfetti(rect.left + rect.width/2, rect.top + rect.height/2);
+            }
+            
+            updateUI();
+        }
+        
+        function fullReset() {
+            currentClicks = 0; 
+            stage1Completed = false; 
+            stage2Started = false; 
+            challengeCompleted = false;
+            waitingForReady = false; 
+            buttonEnabled = true; 
+            
+            clickBtn.disabled = false; 
+            clickBtn.classList.remove('disabled');
+            clickTimestamps = []; 
+            samePositionCount = 0; 
+            clicksWithoutMouseMove = 0; 
+            mouseMoved = true;
+            
+            // Clear memory
+            localStorage.clear(); 
+            saveProgress(); 
+            closeAllModals(); 
+            updateUI();
+        }
+        
+        // Event Listeners
+        clickBtn.addEventListener('click', handleClick);
+        resetBtn.addEventListener('click', fullReset);
+        
+        // Sanity check for UI state on refresh
+        if (stage1Completed && !stage2Started && !challengeCompleted) {
+            showReadyForStage2Modal();
+        } else if (challengeCompleted) {
+            buttonEnabled = false; 
+            clickBtn.disabled = true; 
+            clickBtn.classList.add('disabled');
+        }
+        
+        updateUI();
+    })();
+</script>
+</body>
+</html>
